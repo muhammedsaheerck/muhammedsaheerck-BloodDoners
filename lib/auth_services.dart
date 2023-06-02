@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_otp/email_otp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:testfire/Screens/screen_otp.dart';
 
 class AuthServices {
@@ -86,5 +87,27 @@ class AuthServices {
 
   static logOut() async {
     await FirebaseAuth.instance.signOut();
+  }
+
+  googleSignIn(context) async {
+    try {
+      final GoogleSignInAccount? googleSignInUser =
+          await GoogleSignIn().signIn();
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInUser!.authentication;
+
+      AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleSignInAuthentication.accessToken,
+          idToken: googleSignInAuthentication.idToken);
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      log(userCredential.user!.displayName.toString());
+      if (userCredential.user != null) {
+        Navigator.pushNamed(context, "/");
+      }
+      // return await FirebaseAuth.instance.signInWithCredential(credential);
+    } catch (e) {
+      log(e.toString());
+    }
   }
 }
