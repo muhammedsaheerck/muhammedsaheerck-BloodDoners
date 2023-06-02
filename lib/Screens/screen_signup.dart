@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../auth_services.dart';
+import '../widgets/custom_textfield.dart';
 
 class ScreenSignUp extends StatefulWidget {
   const ScreenSignUp({super.key});
@@ -32,9 +33,9 @@ class _ScreenSignUpState extends State<ScreenSignUp> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TextFormField(
-                decoration: const InputDecoration(hintText: "Name"),
+              CustomTextFormField(
                 controller: nameController,
+                hint: "Name",
                 validator: (value) {
                   if (value!.isEmpty) {
                     return "Enter full name";
@@ -46,9 +47,9 @@ class _ScreenSignUpState extends State<ScreenSignUp> {
               const SizedBox(
                 height: 10,
               ),
-              TextFormField(
-                decoration: const InputDecoration(hintText: "Email"),
+              CustomTextFormField(
                 controller: emilController,
+                hint: "Email",
                 validator: (value) {
                   if (value!.isEmpty || !value.contains("@")) {
                     return "Please enter valid email";
@@ -60,12 +61,12 @@ class _ScreenSignUpState extends State<ScreenSignUp> {
               const SizedBox(
                 height: 10,
               ),
-              TextFormField(
-                decoration: const InputDecoration(hintText: "Password"),
+              CustomTextFormField(
                 controller: passwordControoller,
+                hint: "Password",
                 validator: (value) {
                   if (value!.isEmpty || value.length < 6) {
-                    return "password lenthe minimum 6";
+                    return "password length minimum 6";
                   } else {
                     return null;
                   }
@@ -74,19 +75,22 @@ class _ScreenSignUpState extends State<ScreenSignUp> {
               const SizedBox(
                 height: 20,
               ),
-              ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState!.save();
+              SizedBox(
+                width: 300,
+                child: ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
 
-                      AuthServices.signupUser(
-                          emilController.text,
-                          passwordControoller.text,
-                          nameController.text,
-                          context);
-                    }
-                  },
-                  child: Text("SignUp"))
+                        AuthServices.signupUser(
+                            emilController.text,
+                            passwordControoller.text,
+                            nameController.text,
+                            context);
+                      }
+                    },
+                    child: const Text("SignUp")),
+              )
             ],
           ),
         ),
